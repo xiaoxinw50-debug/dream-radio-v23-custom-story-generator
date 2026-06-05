@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 app.use(cors());
@@ -19,7 +20,7 @@ const gifts = [
   { id: 'deepsea', title: '深海絮语礼盒', price: 199, image: '/assets/gift-deepsea.webp' }
 ];
 
-app.get('/api/health', (_, res) => res.json({ ok: true, name: 'Dream Radio API v12' }));
+app.get('/api/health', (_, res) => res.json({ ok: true, name: 'Dream Radio API v23' }));
 app.get('/api/themes', (_, res) => res.json(themes));
 app.get('/api/gifts', (_, res) => res.json(gifts));
 
@@ -69,5 +70,19 @@ app.post('/api/generate', (req, res) => {
   });
 });
 
+if (process.env.NODE_ENV === 'production') {
+  const frontendDist = path.join(__dirname, '..', 'frontend', 'dist');
+
+  app.use(express.static(frontendDist));
+
+  app.get('*', (req, res) => {
+    if (req.path.startsWith('/api/')) {
+      return res.status(404).json({ error: 'API route not found' });
+    }
+
+    return res.sendFile(path.join(frontendDist, 'index.html'));
+  });
+}
+
 const port = process.env.PORT || 8787;
-app.listen(port, () => console.log(`Dream Radio API running at http://localhost:${port}`));
+app.listen(port, '0.0.0.0', () => console.log(`Dream Radio running on port ${port}`));
