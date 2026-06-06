@@ -1,9 +1,12 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+const frontendDist = path.join(__dirname, '..', 'frontend', 'dist');
 
 const themes = [
   { id: 'rain-bookstore', title: '雨夜书店', desc: '雨声、翻书声、暖灯书页', image: '/assets/theme-rain-bookstore.webp' },
@@ -68,6 +71,9 @@ app.post('/api/generate', (req, res) => {
     chapters: chapters.map((name, index) => ({ no: `0${index + 1}`, name, time: index === 0 ? '09:21' : index === 1 ? '09:48' : '09:36' }))
   });
 });
+
+app.use(express.static(frontendDist));
+app.get('*', (_, res) => res.sendFile(path.join(frontendDist, 'index.html')));
 
 const port = process.env.PORT || 8787;
 app.listen(port, () => console.log(`Dream Radio API running at http://localhost:${port}`));
