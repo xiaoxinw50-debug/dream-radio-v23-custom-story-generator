@@ -403,8 +403,8 @@ function HomePage({ setPage, setStudioTab, themes }) {
       <div className="home-shade" />
       <div className="hero-copy refined-copy">
         <span className="hero-kicker">专属于你的睡前内容小店</span>
-        <h1>今晚想听什么，<br />就让它陪你入睡 ✦</h1>
-        <p>在这里，你可以把喜欢的末世小说、星座脑洞、雨夜故事和白噪音，做成一段适合睡前听的内容。喜欢的话，再解锁完整系列、会员或同主题礼盒。</p>
+        <h1>把你的睡前幻想，<br />写成今晚的晚安故事 ✦</h1>
+        <p>写下一个脑洞，梦境电台会把它变成适合睡前听的故事、音频或星座脚本。喜欢这个世界，再慢慢解锁完整系列、会员或同主题礼盒。</p>
         <div className="hero-actions"><button className="primary" onClick={() => setPage('studio')}>开始做我的晚安内容</button><button className="secondary" onClick={() => setPage('store')}>看看内容小店</button></div>
         <div className="trust-strip">
           <span className="trust-pill">把脑洞写进去</span>
@@ -414,7 +414,7 @@ function HomePage({ setPage, setStudioTab, themes }) {
       </div>
       <div className="hero-card refined-card glass-card">
         <small>正在把你的设定写成故事</small>
-        <h3>末世重生：<br />她靠空间异能养活整座安全屋</h3>
+        <h3 className="hero-card-title">末世重生：<br />她靠空间异能养活整座安全屋</h3>
         <p>末世 · 大女主 · 空间异能 · 囤货建家</p>
         <Wave count={30} />
         <span className="generate-progress">生成中 · 28%</span>

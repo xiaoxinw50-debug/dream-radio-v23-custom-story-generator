@@ -112,3 +112,10 @@ Render 推荐配置：
 - Root Directory：留空
 - Build Command：`npm run build`
 - Start Command：`npm start`
+
+
+## v26 首页首屏修正
+
+- 修复首页右侧生成卡片与耳机素材重叠的问题。
+- 重新调整首屏标题、正文、卡片、耳机的层级和位置。
+- 大标题改为“把你的睡前幻想，写成今晚的晚安故事”，比原来更完整、也更适合首页展示。
