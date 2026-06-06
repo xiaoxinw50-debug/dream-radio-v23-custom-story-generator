@@ -1467,3 +1467,39 @@ button:not(.brand):not(.content-card):not(.theme-card-home):not(.mini-theme):act
     flex-direction:column;
   }
 }
+
+
+/* v24 friendly copy polish */
+.hero-kicker,
+.pill,
+.trust-pill,
+.store-price-strip span,
+.product-benefits em,
+.friendly-hint{
+  letter-spacing:.04em;
+}
+.friendly-hint{
+  margin:-2px 0 14px;
+  padding:12px 14px;
+  border:1px solid rgba(234,210,165,.18);
+  border-radius:14px;
+  background:rgba(234,210,165,.075);
+  color:#f0d9ad;
+  line-height:1.65;
+  font-size:13px;
+}
+.result-summary p,
+.preview-copy p,
+.product-body p,
+.store-entry-copy p,
+.checkout-note,
+.profile-panel blockquote{
+  letter-spacing:.01em;
+}
+.setting-input,
+.text-input{
+  font-size:14px;
+}
+.full-story-card pre{
+  font-size:14.5px;
+}

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
 
-const API = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:8787' : '');
+const API = import.meta.env.VITE_API_URL || 'http://localhost:8787';
 
 const mainNav = [
   { key: 'home', label: '首页' },
@@ -19,33 +19,33 @@ const fallbackThemes = [
   { id: 'cat-hotel', title: '猫咪旅馆', desc: '软垫、猫咪呼噜、温柔陪伴', image: '/assets/theme-cat-hotel.webp', target: 'sleep' },
   { id: 'underground-garden', title: '末日地下花园', desc: '大女主、无 CP、空间异能', image: '/assets/theme-underground-garden.webp', target: 'studio', tab: 'apocalypse' },
   { id: 'zodiac-office', title: '星座梦境管理局', desc: '十二星座、庇护所、视频分镜', image: '/assets/theme-zodiac-office.webp', target: 'studio', tab: 'zodiac' },
-  { id: 'night-store', title: '深夜便利店', desc: '夜灯、街角、低刺激治愈', image: '/assets/theme-night-store.webp', target: 'sleep' }
+  { id: 'night-store', title: '深夜便利店', desc: '夜灯、街角、睡前温和版治愈', image: '/assets/theme-night-store.webp', target: 'sleep' }
 ];
 
 const fallbackGifts = [
-  { id: 'starsea', title: '星海入梦礼盒', price: 129, image: '/assets/gift-starsea.webp', match: '星座梦境管理局', desc: '星座梦境卡、晚安音频兑换码、月光贴纸与睡前记录本。' },
+  { id: 'starsea', title: '星海入梦礼盒', price: 129, image: '/assets/gift-starsea.webp', match: '星座梦境管理局', desc: '星座梦境卡、晚安内容兑换码、月光贴纸与睡前记录本。' },
   { id: 'moonfairy', title: '月光童话礼盒', price: 169, image: '/assets/gift-moonfairy.webp', match: '雨夜书店', desc: '睡前香薰、眼罩、月光明信片与雨夜书店会员音频包。' },
-  { id: 'deepsea', title: '深海絮语礼盒', price: 199, image: '/assets/gift-deepsea.webp', match: '末日地下花园', desc: '安全感助眠包、主题卡册、限定音频兑换码与小夜灯。' }
+  { id: 'deepsea', title: '深海絮语礼盒', price: 199, image: '/assets/gift-deepsea.webp', match: '末日地下花园', desc: '安全感助眠包、主题卡册、限定内容兑换码与小夜灯。' }
 ];
 
 const contentTypes = [
   { key: '末世小说', tab: 'apocalypse', desc: '大女主、CP、异能、篇幅与助眠强度可定制', cover: '/assets/theme-underground-garden.webp' },
   { key: '十二星座视频', tab: 'zodiac', desc: '星座选择庇护所、梦境房间，生成口播与分镜', cover: '/assets/theme-zodiac-office.webp' },
-  { key: '睡前故事', tab: 'story', desc: '雨夜书店、猫咪旅馆、深夜便利店等低刺激故事', cover: '/assets/theme-rain-bookstore.webp' },
+  { key: '睡前故事', tab: 'story', desc: '雨夜书店、猫咪旅馆、深夜便利店等睡前温和版故事', cover: '/assets/theme-rain-bookstore.webp' },
   { key: '白噪音声景', tab: 'soundscape', desc: '雨声、海浪、壁炉、翻书声，配合定时淡出', cover: '/assets/theme-cat-hotel.webp' }
 ];
 
 const digitalProducts = [
-  { id: 'pack-apocalypse', type: '内容包', scene: 'apocalypse', title: '《末世重生：她靠空间异能养活整座安全屋》10 集', price: 12.9, oldPrice: 19.9, cover: '/assets/theme-underground-garden.webp', desc: '大女主、空间异能、囤货经营，前 3 集免费，第 4–10 集解锁。', badge: '限时内容包', benefits: ['10 集连续剧', '低刺激睡前版', '空间异能设定库'] },
+  { id: 'pack-apocalypse', type: '内容包', scene: 'apocalypse', title: '《末世重生：她靠空间异能养活整座安全屋》10 集', price: 12.9, oldPrice: 19.9, cover: '/assets/theme-underground-garden.webp', desc: '大女主、空间异能、囤货经营，前 3 集免费，第 4–10 集解锁。', badge: '限时小内容包', benefits: ['10 集连续剧', '睡前温和版睡前版', '空间能力设定库'] },
   { id: 'pack-zodiac', type: '内容包', scene: 'zodiac', title: '十二星座末日庇护所视频脚本包', price: 9.9, oldPrice: 15.9, cover: '/assets/theme-zodiac-office.webp', desc: '一次生成 12 个星座庇护所分镜、口播文案和封面标题。', badge: '视频脚本包', benefits: ['12 星座分镜', '口播文案', '封面标题'] },
   { id: 'pack-story', type: '内容包', scene: 'story', title: '雨夜书店晚安故事包', price: 6.9, oldPrice: 12.9, cover: '/assets/theme-rain-bookstore.webp', desc: '7 晚连续睡前故事，配合雨声、翻书声和温柔旁白。', badge: '晚安故事包', benefits: ['7 晚故事', '温柔声线', '睡前情绪适配'] },
   { id: 'pack-soundscape', type: '内容包', scene: 'soundscape', title: '白噪音高级混音包', price: 4.9, oldPrice: 8.9, cover: '/assets/theme-cat-hotel.webp', desc: '雨声、海浪、壁炉、猫咪呼噜，支持定时淡出与混音比例保存。', badge: '声景混音包', benefits: ['高级白噪音', '混音保存', '定时淡出'] },
-  { id: 'pack-exam', type: '内容包', scene: 'story', title: '考前放松睡前包', price: 9.9, oldPrice: 16.9, cover: '/assets/theme-night-store.webp', desc: '适合期末、考研、论文焦虑，降低信息刺激，帮助睡前切换状态。', badge: '场景包', benefits: ['考前焦虑', '低刺激故事', '20 分钟淡出'] },
+  { id: 'pack-exam', type: '内容包', scene: 'story', title: '考前放松睡前包', price: 9.9, oldPrice: 16.9, cover: '/assets/theme-night-store.webp', desc: '适合期末、考研、论文焦虑，降低信息刺激，帮助睡前切换状态。', badge: '场景包', benefits: ['考前焦虑', '睡前温和版故事', '20 分钟淡出'] },
   { id: 'pack-alone', type: '内容包', scene: 'apocalypse', title: '独居女生安全感音频包', price: 12.9, oldPrice: 19.9, cover: '/assets/theme-cat-hotel.webp', desc: '安全屋、猫咪、雨夜、电台陪伴，适合独居夜晚和睡前放松。', badge: '安全感包', benefits: ['安全屋世界观', '猫咪陪伴', '晚安电台'] }
 ];
 
 const memberProducts = {
-  apocalypse: { id: 'vip-apocalypse', type: '会员', title: '末世连续剧会员 · 年卡', price: 128, cover: '/assets/theme-underground-garden.webp', desc: '解锁 90 分钟长音频、安全屋系列追更和异能设定库。' },
+  apocalypse: { id: 'vip-apocalypse', type: '会员', title: '末世连续剧会员 · 年卡', price: 128, cover: '/assets/theme-underground-garden.webp', desc: '解锁 90 分钟长音频、安全屋系列追更和能力设定库。' },
   zodiac: { id: 'vip-zodiac', type: '会员', title: '星座视频创作会员 · 年卡', price: 168, cover: '/assets/theme-zodiac-office.webp', desc: '解锁十二星座分镜导出、封面标题库和批量生成。' },
   story: { id: 'vip-story', type: '会员', title: '晚安故事会员 · 年卡', price: 98, cover: '/assets/theme-rain-bookstore.webp', desc: '解锁高级声线、雨夜书店追更和情绪适配报告。' },
   soundscape: { id: 'vip-soundscape', type: '会员', title: '白噪音声景会员 · 年卡', price: 88, cover: '/assets/theme-cat-hotel.webp', desc: '解锁高品质环境音、混音保存和整夜循环淡出。' }
@@ -87,13 +87,13 @@ const contentConfigs = {
     buttonLabel: '生成末世章节',
     resultReason: '系统降低了高强度冲突，把废墟、温室、储物空间与植物生长写成更安静的睡前版本。',
     quote: '上一世她救错了人，这一世，她只救值得活下去的人。',
-    chips: ['末世声景', '安全屋氛围', '低刺激成长'],
+    chips: ['末世声景', '安全屋氛围', '睡前温和版成长'],
     chapters: [{ no: '01', name: '重回末世前三天', time: '09:21' },{ no: '02', name: '空间仓库第一次开启', time: '09:48' },{ no: '03', name: '安全屋收留第一批人', time: '09:36' }],
-    sleepTitle: '为你生成的今夜音频',
-    sleepHint: '重生、囤货、空间异能与安全屋经营，会在低刺激版本里慢慢淡出。',
-    detailTitle: '故事设定',
-    detailText: '世界观：末日地下花园\n主角特质：冷静、成长、治愈\n本集氛围：低刺激，适合睡前',
-    companionTitle: '今夜章节'
+    sleepTitle: '今晚为你准备的内容',
+    sleepHint: '重生、囤货、空间异能与安全屋经营，会在睡前温和版版本里慢慢淡出。',
+    detailTitle: '主角设定',
+    detailText: '世界观：末日地下花园\n主角特质：冷静、成长、治愈\n本集氛围：睡前温和版，适合睡前',
+    companionTitle: '今晚会听到'
   },
   zodiac: {
     scene: 'zodiac',
@@ -104,11 +104,11 @@ const contentConfigs = {
     previewTitle: '星座梦境管理局',
     previewDesc: '把十二星座放进同一片星穹：有人住进玻璃穹顶，有人守着月光塔楼，也有人拥有海上庇护所。',
     previewFine: '适合生成口播文案、分镜脚本、封面标题；推荐星海入梦礼盒。',
-    buttonLabel: '生成星座分镜',
-    resultReason: '系统会根据星座氛围、庇护所类型与视频输出形式，为你生成更适合传播的镜头与文案节奏。',
+    buttonLabel: '生成星座脚本',
+    resultReason: '系统会根据星座氛围、庇护所类型与视频想要什么成品，为你生成更适合传播的镜头与文案节奏。',
     quote: '当十二种性格住进同一片星空，每个梦境都会有自己的光。',
     chips: ['星空镜头', '分镜脚本', '口播文案'],
-    chapters: [{ no: '01', name: '开场钩子：选择你的庇护所', time: '00:18' },{ no: '02', name: '星座分组与场景切换', time: '00:31' },{ no: '03', name: '月光收束与结尾文案', time: '00:22' }],
+    chapters: [{ no: '01', name: '开头怎么抓人：选择你的庇护所', time: '00:18' },{ no: '02', name: '星座怎么分组与场景切换', time: '00:31' },{ no: '03', name: '月光收束与结尾文案', time: '00:22' }],
     sleepTitle: '为你生成的今夜视频脚本',
     sleepHint: '这一版分镜更强调星空、月光与梦境房间的视觉连续性。',
     detailTitle: '分镜设定',
@@ -120,7 +120,7 @@ const contentConfigs = {
     label: '睡前故事',
     cover: '/assets/theme-rain-bookstore.webp',
     accent: 'story',
-    badge: '雨夜书店 / 低刺激叙事 / 温柔陪伴',
+    badge: '雨夜书店 / 睡前温和版叙事 / 温柔陪伴',
     previewTitle: '雨夜书店',
     previewDesc: '雨滴落在窗面上，书页轻轻翻过，你在书灯和暖雾里，慢慢把白天的情绪放下。',
     previewFine: '适合焦虑、疲惫、孤独等夜晚情绪；推荐月光童话礼盒与连续剧式追更。',
@@ -130,9 +130,9 @@ const contentConfigs = {
     chips: ['温柔旁白', '雨夜环境音', '陪伴式叙事'],
     chapters: [{ no: '01', name: '晚安前的最后一盏灯', time: '08:42' },{ no: '02', name: '雨声落在窗边', time: '09:06' },{ no: '03', name: '故事慢慢淡出', time: '08:57' }],
     sleepTitle: '为你生成的今夜故事',
-    sleepHint: '低刺激睡前故事已经准备好，旁白会在结尾慢慢变轻。',
-    detailTitle: '故事设定',
-    detailText: '主题世界：雨夜书店\n旁白风格：温柔、缓慢、陪伴\n本集氛围：适合焦虑与疲惫的夜晚',
+    sleepHint: '睡前温和版睡前故事已经准备好，旁白会在结尾慢慢变轻。',
+    detailTitle: '主角设定',
+    detailText: '故事发生地：雨夜书店\n旁白风格：温柔、缓慢、陪伴\n本集氛围：适合焦虑与疲惫的夜晚',
     companionTitle: '今夜陪伴'
   },
   soundscape: {
@@ -145,14 +145,14 @@ const contentConfigs = {
     previewDesc: '把雨声、海浪、壁炉与轻音乐慢慢混进夜色里，只保留最安静的环境陪伴。',
     previewFine: '适合直接入睡、冥想放空或专注休息；推荐深海絮语礼盒。',
     buttonLabel: '生成声景组合',
-    resultReason: '系统会根据你选择的环境音、背景音乐和自动结束时间，生成更适合入睡节奏的声景组合。',
+    resultReason: '系统会根据你选择的环境音、背景音乐和多久后停时间，生成更适合入睡节奏的声景组合。',
     quote: '有时陪你入睡的，不必是一段故事，只要是刚刚好的夜晚声音。',
     chips: ['雨声 / 海浪', '定时淡出', '低干扰循环'],
     chapters: [{ no: '01', name: '环境声进入', time: '10:00' },{ no: '02', name: '音量稳定循环', time: '10:00' },{ no: '03', name: '逐渐淡出停止', time: '10:00' }],
     sleepTitle: '为你生成的今夜声景',
     sleepHint: '环境声景已准备好，会在设定时间后自然淡出。',
     detailTitle: '声景设定',
-    detailText: '环境音：雨声、海浪、壁炉等\n播放方式：循环、低刺激、自动淡出\n本集氛围：适合直接入睡或放空',
+    detailText: '环境音：雨声、海浪、壁炉等\n播放方式：循环、睡前温和版、自动淡出\n本集氛围：适合直接入睡或放空',
     companionTitle: '今夜声景'
   }
 };
@@ -184,9 +184,9 @@ function buildFullStory(contentType, theme, form, cfg) {
   const mustHave = normalizeSetting(form.mustHave);
   const avoid = normalizeSetting(form.avoidElements);
   const pov = form.pov || '第三人称';
-  const density = form.dramaLevel || '中等狗血';
+  const density = form.dramaLevel || '有点狗血';
   const ending = form.endingStyle || '留悬念';
-  const baseSetting = custom || `${theme}，${form.storyMode || '大女主'}，${form.power || '空间异能'}，${form.tone || '低刺激'}`;
+  const baseSetting = custom || `${theme}，${form.storyMode || '大女主'}，${form.power || '空间异能'}，${form.tone || '睡前温和版'}`;
 
   if (contentType === '十二星座视频') {
     return `【用户设定】${baseSetting}
@@ -380,16 +380,16 @@ function Segment({ values, value, onChange }) { return <div className="segment">
 
 function HomePage({ setPage, setStudioTab, themes }) {
   const flow = [
-    { icon: '◫', title: '免费试听 3 分钟', desc: '低门槛获客与体验' },
-    { icon: '☷', title: '生成完整内容', desc: 'AI 定制标题、章节、声景' },
-    { icon: '✦', title: '购买内容包', desc: '单集 / 系列 / 脚本包' },
-    { icon: '◔', title: '开通会员', desc: '追更、长音频、批量导出' },
-    { icon: '⌘', title: '推荐主题礼盒', desc: '内容 IP 到实物商品' }
+    { icon: '◫', title: '先听 3 分钟', desc: '先试试看合不合耳朵' },
+    { icon: '☷', title: '继续生成完整版', desc: '标题、章节、声音一起配好' },
+    { icon: '✦', title: '买一个内容包', desc: '单集、系列、脚本都可以' },
+    { icon: '◔', title: '想多听就开会员', desc: '追更、长音频、批量生成' },
+    { icon: '⌘', title: '顺手看看同款礼盒', desc: '把喜欢的世界带回现实' }
   ];
   const reasons = [
-    ['✦', 'AI 个性化生成', '根据你的情绪与偏好，生成只属于你的晚安内容。'],
-    ['☾', '沉浸式助眠体验', '声景融合与智能播放，帮你放松身心，安心入眠。'],
-    ['◌', '多内容类型陪伴', '小说、视频、音频、白噪音，满足不同夜晚的你。']
+    ['✦', '按你的想法来写', '你写下想看的设定，它会帮你整理成更适合睡前听的故事。'],
+    ['☾', '听起来不吵，慢慢放松', '雨声、钢琴、旁白都可以调，不用一直盯着屏幕。'],
+    ['◌', '不止一种晚安方式', '想听小说、看星座脑洞，或者只放一点白噪音，都可以。']
   ];
   const appCards = [
     { title: '欢迎页', subtitle: '欢迎来到梦境电台', image: '/assets/hero-window.webp', tone: 'moon' },
@@ -402,20 +402,20 @@ function HomePage({ setPage, setStudioTab, themes }) {
       <img className="home-bg" src="/assets/hero-window.webp" alt="月夜窗景" />
       <div className="home-shade" />
       <div className="hero-copy refined-copy">
-        <span className="hero-kicker">AI 个性化睡前内容电商平台</span>
-        <h1>把你喜欢的幻想，<br />变成今晚的晚安内容 ✦</h1>
-        <p>梦境电台把末世小说、十二星座视频、睡前故事和白噪音，统一做成更适合夜晚使用的低刺激内容，并连接会员订阅、数字内容包和主题礼盒购买。</p>
-        <div className="hero-actions"><button className="primary" onClick={() => setPage('studio')}>开始生成专属内容</button><button className="secondary" onClick={() => setPage('store')}>逛内容商店</button></div>
+        <span className="hero-kicker">专属于你的睡前内容小店</span>
+        <h1>今晚想听什么，<br />就让它陪你入睡 ✦</h1>
+        <p>在这里，你可以把喜欢的末世小说、星座脑洞、雨夜故事和白噪音，做成一段适合睡前听的内容。喜欢的话，再解锁完整系列、会员或同主题礼盒。</p>
+        <div className="hero-actions"><button className="primary" onClick={() => setPage('studio')}>开始做我的晚安内容</button><button className="secondary" onClick={() => setPage('store')}>看看内容小店</button></div>
         <div className="trust-strip">
-          <span className="trust-pill">输入设定生成完整故事</span>
-          <span className="trust-pill">十二星座决定你的庇护所</span>
-          <span className="trust-pill">礼盒与会员自然联动</span>
+          <span className="trust-pill">把脑洞写进去</span>
+          <span className="trust-pill">看看我的星座庇护所</span>
+          <span className="trust-pill">喜欢再慢慢解锁</span>
         </div>
       </div>
       <div className="hero-card refined-card glass-card">
-        <small>输入设定后，AI 正在生成完整故事</small>
+        <small>正在把你的设定写成故事</small>
         <h3>末世重生：<br />她靠空间异能养活整座安全屋</h3>
-        <p>末世小说 · 大女主 · 无 CP · 空间异能 · 囤货经营</p>
+        <p>末世 · 大女主 · 空间异能 · 囤货建家</p>
         <Wave count={30} />
         <span className="generate-progress">生成中 · 28%</span>
       </div>
@@ -432,7 +432,7 @@ function HomePage({ setPage, setStudioTab, themes }) {
 
     <section className="home-section theme-section">
       <div className="home-section-head">
-        <h2>热门梦境主题</h2>
+        <h2>今晚大家在听什么</h2>
         <button onClick={() => setPage('studio')}>查看更多 ›</button>
       </div>
       <div className="theme-grid-home">
@@ -446,14 +446,14 @@ function HomePage({ setPage, setStudioTab, themes }) {
 
     <section className="home-section store-entry-home">
       <div className="home-section-head">
-        <h2>内容商店入口</h2>
-        <button onClick={() => setPage('store')}>进入内容商店 ›</button>
+        <h2>内容小店</h2>
+        <button onClick={() => setPage('store')}>进店看看 ›</button>
       </div>
       <div className="store-entry-panel panel">
         <div className="store-entry-copy">
           <span className="pill gold">Digital Content Store</span>
-          <h3>先试听，再购买完整内容包</h3>
-          <p>面向不想立刻开会员的用户，提供 4.9–12.9 元的数字内容包，承接从免费生成到单次付费的电商转化。</p>
+          <h3>先听一小段，喜欢再买完整版</h3>
+          <p>不想马上开会员也没关系。你可以先买一个 4.9–12.9 元的小内容包，听完再决定要不要追更。</p>
           <div className="store-price-strip">
             <span>雨夜故事包 ¥6.9</span>
             <span>星座脚本包 ¥9.9</span>
@@ -502,7 +502,7 @@ function HomePage({ setPage, setStudioTab, themes }) {
     </section>
 
     <section className="home-section reason-section">
-      <h2>为什么选择梦境电台</h2>
+      <h2>为什么睡前适合用它</h2>
       <div className="reason-grid">
         {reasons.map(([icon, title, desc]) => <div className="reason-card" key={title}><div className="reason-icon">{icon}</div><div><h3>{title}</h3><p>{desc}</p></div></div>)}
       </div>
@@ -510,12 +510,12 @@ function HomePage({ setPage, setStudioTab, themes }) {
 
     <section className="home-cta-bar panel">
       <div className="cta-copy">
-        <h2>今晚，开始你的梦境之旅</h2>
-        <p>从免费试听开始，购买完整内容包、开通会员，或把喜欢的世界带回现实。</p>
+        <h2>今晚，就从一个小脑洞开始</h2>
+        <p>先生成一段试听。喜欢这个世界，再买完整内容包、开会员，或者看看同主题礼盒。</p>
       </div>
       <div className="cta-actions">
-        <button className="primary" onClick={() => setPage('studio')}>开始生成专属内容</button>
-        <button className="secondary" onClick={() => setPage('store')}>购买内容包</button>
+        <button className="primary" onClick={() => setPage('studio')}>开始做我的晚安内容</button>
+        <button className="secondary" onClick={() => setPage('store')}>买一个内容包</button>
       </div>
     </section>
 
@@ -535,7 +535,7 @@ function StudioPage({ tab, setTab, form, setForm, generate, setPage }) {
     <div className="scene-content">
       <SectionHeader kicker={`02 创作中心 · ${sceneMeta.label}`} title="今晚想把哪种幻想做成晚安内容" desc="不同内容类型会进入不同的梦境场景：末世废墟、星座星穹、温柔雨夜和月光白噪音。" />
       <div className="studio-tabs">
-        <button className={tab === 'choose' ? 'active' : ''} onClick={() => setTab('choose')}>选择类型</button>
+        <button className={tab === 'choose' ? 'active' : ''} onClick={() => setTab('choose')}>先选类型</button>
         {contentTypes.map((item) => <button key={item.tab} className={tab === item.tab ? 'active' : ''} onClick={() => setTab(item.tab)}>{item.key}</button>)}
       </div>
       {tab === 'choose' && <ContentChooser setTab={setTab} />}
@@ -559,18 +559,18 @@ function ContentChooser({ setTab }) {
 function ApocalypseDesigner({ form, setForm, generate }) {
   return <div className="form-layout">
     <Panel className="form-panel">
-      <Field label="故事设定"><Segment values={['大女主', '群像生存', '经营囤货']} value={form.storyMode} onChange={(v) => setForm({ storyMode: v })} /></Field>
-      <Field label="CP 设定"><Segment values={['无 CP', '有 CP']} value={form.cpMode} onChange={(v) => setForm({ cpMode: v })} /></Field>
-      <Field label="异能设定"><Segment values={['空间异能', '治愈系异能', '植物操控', '预知梦境', '时间回溯']} value={form.power} onChange={(v) => setForm({ power: v })} /></Field>
-      <Field label="故事基调"><Segment values={['热血', '治愈', '低刺激', '成长']} value={form.tone} onChange={(v) => setForm({ tone: v })} /></Field>
-      <Field label="字数 / 时长"><Segment values={['短篇', '中篇', '长篇']} value={form.length} onChange={(v) => setForm({ length: v })} /></Field>
-      <Field label="你想看的设定"><textarea className="setting-input" value={form.customSetting} onChange={(e) => setForm({ customSetting: e.target.value })} placeholder="例如：女主重生回末世前三天，觉醒空间异能，囤货建安全屋，前男友和白月光后来跪求收留。" /></Field>
+      <Field label="主角设定"><Segment values={['大女主', '群像生存', '经营囤货']} value={form.storyMode} onChange={(v) => setForm({ storyMode: v })} /></Field>
+      <Field label="感情线"><Segment values={['无 CP', '有 CP']} value={form.cpMode} onChange={(v) => setForm({ cpMode: v })} /></Field>
+      <Field label="能力设定"><Segment values={['空间异能', '治愈系异能', '植物操控', '预知梦境', '时间回溯']} value={form.power} onChange={(v) => setForm({ power: v })} /></Field>
+      <Field label="故事味道"><Segment values={['热血', '治愈', '睡前温和版', '成长']} value={form.tone} onChange={(v) => setForm({ tone: v })} /></Field>
+      <Field label="长度"><Segment values={['短篇', '中篇', '长篇']} value={form.length} onChange={(v) => setForm({ length: v })} /></Field>
+      <div className="friendly-hint">不用写得很完整，像发弹幕一样写设定就行。</div><div className="friendly-hint">写一句今晚想听的故事，我们帮你整理成更完整的版本。</div><Field label="你想看的脑洞"><textarea className="setting-input" value={form.customSetting} onChange={(e) => setForm({ customSetting: e.target.value })} placeholder="例如：女主重生回末世前三天，觉醒空间异能，开始囤货建安全屋。前男友后来带着白月光来求收留，但她这次不心软。" /></Field>
       <div className="two-field-grid">
-        <Field label="必须出现"><input className="text-input" value={form.mustHave} onChange={(e) => setForm({ mustHave: e.target.value })} placeholder="空间仓库、囤货、打脸、收留孩子" /></Field>
-        <Field label="不要出现"><input className="text-input" value={form.avoidElements} onChange={(e) => setForm({ avoidElements: e.target.value })} placeholder="血腥、惊吓、虐女主" /></Field>
+        <Field label="一定要有"><input className="text-input" value={form.mustHave} onChange={(e) => setForm({ mustHave: e.target.value })} placeholder="空间仓库、囤货、打脸、收留孩子" /></Field>
+        <Field label="尽量不要"><input className="text-input" value={form.avoidElements} onChange={(e) => setForm({ avoidElements: e.target.value })} placeholder="血腥、惊吓、虐女主" /></Field>
       </div>
-      <Field label="生成风格"><Segment values={['低刺激', '中等狗血', '强爽文']} value={form.dramaLevel} onChange={(v) => setForm({ dramaLevel: v })} /></Field>
-      <button className="primary wide tone-apocalypse" onClick={() => generate('末世小说', form.customSetting || '末日地下花园')}>按我的设定生成完整故事</button>
+      <Field label="爽感程度"><Segment values={['睡前温和版', '有点狗血', '爽文拉满']} value={form.dramaLevel} onChange={(v) => setForm({ dramaLevel: v })} /></Field>
+      <button className="primary wide tone-apocalypse" onClick={() => generate('末世小说', form.customSetting || '末日地下花园')}>按这个脑洞写完整故事</button>
     </Panel>
     <Panel className="preview-panel accent-card apocalypse">
       <img src="/assets/theme-underground-garden.webp" alt="" />
@@ -584,11 +584,11 @@ function ZodiacDesigner({ form, setForm, generate }) {
     <Panel className="zodiac-panel">
       <Field label="视频主题"><Segment values={['末日庇护所', '极寒避难屋', '洪水海上基地', '专属梦境房间']} value={form.zodiacScene} onChange={(v) => setForm({ zodiacScene: v })} /></Field>
       <Field label="星座氛围"><div className="zodiac-icons">{['白羊座','金牛座','双子座','巨蟹座','狮子座','处女座','天秤座','天蝎座','射手座','摩羯座','水瓶座','双鱼座'].map((z) => <button key={z} className={form.zodiacSign === z ? 'active' : ''} onClick={() => setForm({ zodiacSign: z })}>{z}</button>)}</div></Field>
-      <Field label="输出形式"><Segment values={['口播文案', '分镜脚本', '视频标题', '封面文案']} value={form.videoOutput} onChange={(v) => setForm({ videoOutput: v })} /></Field>
+      <Field label="想要什么成品"><Segment values={['口播文案', '分镜脚本', '视频标题', '封面文案']} value={form.videoOutput} onChange={(v) => setForm({ videoOutput: v })} /></Field>
       <button className="primary wide tone-zodiac" onClick={() => generate('十二星座视频', '星座梦境管理局')}>{contentConfigs.zodiac.buttonLabel}</button>
     </Panel>
     <Panel className="script-preview accent-card zodiac">
-      <label>{contentConfigs.zodiac.badge}</label><h2>视频结构预览</h2><ol><li><b>开场钩子</b><span>如果末世突然来临，你的星座会住进哪一种庇护所？</span></li><li><b>星座分组</b><span>火象、土象、风象、水象分别进入不同安全屋。</span></li><li><b>视觉分镜</b><span>慢镜头、月光、低饱和蓝紫色、柔和旁白。</span></li></ol>
+      <label>{contentConfigs.zodiac.badge}</label><h2>视频可以这样拍</h2><ol><li><b>开头怎么抓人</b><span>如果末世突然来临，你的星座会住进哪一种庇护所？</span></li><li><b>星座怎么分组</b><span>火象、土象、风象、水象分别进入不同安全屋。</span></li><li><b>画面怎么展开</b><span>慢镜头、月光、低饱和蓝紫色、柔和旁白。</span></li></ol>
     </Panel>
   </div>;
 }
@@ -596,16 +596,16 @@ function ZodiacDesigner({ form, setForm, generate }) {
 function StoryDesigner({ form, setForm, generate }) {
   return <div className="form-layout">
     <Panel className="form-panel">
-      <Field label="主题世界"><Segment values={['雨夜书店', '猫咪旅馆', '深夜便利店', '海边小镇来信']} value={form.theme} onChange={(v) => setForm({ theme: v })} /></Field>
-      <Field label="当晚情绪"><Segment values={['焦虑', '疲惫', '委屈', '孤独', '脑子停不下来']} value={form.mood} onChange={(v) => setForm({ mood: v })} /></Field>
-      <Field label="旁白声线"><Segment values={voices} value={form.voice} onChange={(v) => setForm({ voice: v })} /></Field>
-      <Field label="自动结束"><Segment values={timers.map((t) => `${t} 分`)} value={`${form.endAfter} 分`} onChange={(v) => setForm({ endAfter: Number(v.replace(' 分', '')) })} /></Field>
-      <Field label="你想看的设定"><textarea className="setting-input" value={form.customSetting} onChange={(e) => setForm({ customSetting: e.target.value })} placeholder="例如：雨夜书店里有一只会安慰人的猫，女主今晚很焦虑，老板给她讲一个慢慢睡着的故事。" /></Field>
+      <Field label="故事发生地"><Segment values={['雨夜书店', '猫咪旅馆', '深夜便利店', '海边小镇来信']} value={form.theme} onChange={(v) => setForm({ theme: v })} /></Field>
+      <Field label="今晚的状态"><Segment values={['焦虑', '疲惫', '委屈', '孤独', '脑子停不下来']} value={form.mood} onChange={(v) => setForm({ mood: v })} /></Field>
+      <Field label="想听的声音"><Segment values={voices} value={form.voice} onChange={(v) => setForm({ voice: v })} /></Field>
+      <Field label="多久后停"><Segment values={timers.map((t) => `${t} 分`)} value={`${form.endAfter} 分`} onChange={(v) => setForm({ endAfter: Number(v.replace(' 分', '')) })} /></Field>
+      <Field label="你想看的脑洞"><textarea className="setting-input" value={form.customSetting} onChange={(e) => setForm({ customSetting: e.target.value })} placeholder="例如：雨夜书店快打烊了，店里有一只会安慰人的猫。女主今晚很焦虑，老板给她讲一个慢慢放松下来的故事。" /></Field>
       <div className="two-field-grid">
-        <Field label="必须出现"><input className="text-input" value={form.mustHave} onChange={(e) => setForm({ mustHave: e.target.value })} placeholder="雨声、猫、暖灯、书页" /></Field>
-        <Field label="不要出现"><input className="text-input" value={form.avoidElements} onChange={(e) => setForm({ avoidElements: e.target.value })} placeholder="惊吓、反转、争吵" /></Field>
+        <Field label="一定要有"><input className="text-input" value={form.mustHave} onChange={(e) => setForm({ mustHave: e.target.value })} placeholder="雨声、猫、暖灯、书页" /></Field>
+        <Field label="尽量不要"><input className="text-input" value={form.avoidElements} onChange={(e) => setForm({ avoidElements: e.target.value })} placeholder="惊吓、反转、争吵" /></Field>
       </div>
-      <button className="primary wide tone-story" onClick={() => generate('睡前故事', form.customSetting || form.theme || '雨夜书店')}>按我的设定生成完整故事</button>
+      <button className="primary wide tone-story" onClick={() => generate('睡前故事', form.customSetting || form.theme || '雨夜书店')}>按这个脑洞写完整故事</button>
     </Panel>
     <Panel className="preview-panel compact-preview accent-card story"><img src="/assets/theme-rain-bookstore.webp" alt="" /><div className="preview-copy"><label>{contentConfigs.story.badge}</label><h2>{contentConfigs.story.previewTitle}</h2><p>{contentConfigs.story.previewDesc}</p><p className="fine-print">{contentConfigs.story.previewFine}</p></div></Panel>
   </div>;
@@ -620,7 +620,7 @@ function SoundscapeDesigner({ form, setForm, generate, setPage }) {
     </Panel>
     <Panel className="audio-control">
       <Field label="环境音效"><Segment values={bgs} value={form.background} onChange={(v) => setForm({ background: v })} /></Field>
-      <Field label="自动结束"><Segment values={timers.map((t) => `${t} 分`)} value={`${form.endAfter} 分`} onChange={(v) => setForm({ endAfter: Number(v.replace(' 分', '')) })} /></Field>
+      <Field label="多久后停"><Segment values={timers.map((t) => `${t} 分`)} value={`${form.endAfter} 分`} onChange={(v) => setForm({ endAfter: Number(v.replace(' 分', '')) })} /></Field>
       <div className="volume"><span>背景音量</span><input type="range" min="0" max="100" value={form.musicVolume} onChange={(e) => setForm({ musicVolume: Number(e.target.value) })} /><b>{form.musicVolume}%</b></div>
       <button className="primary wide tone-soundscape" onClick={() => generate('白噪音声景', '月光白噪音电台')}>{contentConfigs.soundscape.buttonLabel}</button>
     </Panel>
@@ -637,24 +637,24 @@ function ResultPage({ track, form, setPage, gifts, addToCart }) {
   return <main className={`page themed-page scene-page scene-${scene}`}>
     <SceneBackdrop scene={scene} />
     <div className="scene-content">
-      <SectionHeader kicker={`03 生成结果 · ${sceneMeta.label}`} title={`你的${cfg.label}已经生成，先确认再进入播放`} desc="先看摘要、章节和适配理由，再决定是直接播放、解锁完整内容，还是顺着当前世界观购买礼盒或会员。" />
+      <SectionHeader kicker={`03 生成结果 · ${sceneMeta.label}`} title={`${cfg.label}写好了，先看一眼再播放`} desc="先看故事、章节和推荐理由。觉得合口味，再播放、买完整版，或者看看同主题礼盒。" />
       <div className="result-layout">
         <Panel className="result-main">
           <div className={`result-head ${cfg.accent}`}><img src={track?.cover || cfg.cover} alt="" /><div><span className={`pill ${cfg.accent}`}>{cfg.badge}</span><h2>{track?.title}</h2><p>{track?.subtitle}</p></div></div>
-          <div className={`result-summary ${cfg.accent}`}><h3>适配理由</h3><p>{track?.userSetting ? `已根据你的设定「${track.userSetting}」生成完整内容，并保留 ${track.mustHave || '核心情节'}，规避 ${track.avoidElements || '高刺激元素'}。` : cfg.resultReason}</p></div>
+          <div className={`result-summary ${cfg.accent}`}><h3>为什么这样写</h3><p>{track?.userSetting ? `我按你的设定「${track.userSetting}」继续生成完整版，并保留 ${track.mustHave || '核心情节'}，规避 ${track.avoidElements || '高刺激元素'}。` : cfg.resultReason}</p></div>
           <div className="chapter-grid">{chapters.map((c) => <div className="chapter" key={c.no}><b>{c.no}</b><span>{c.name}</span><em>{c.time}</em></div>)}</div>
-          {track?.fullStory && <div className={`full-story-card ${cfg.accent}`}><div className="full-story-head"><h3>完整故事 / 脚本预览</h3><span>{track.userSetting ? '根据用户设定生成' : '系统生成'}</span></div><pre>{track.fullStory}</pre></div>}
+          {track?.fullStory && <div className={`full-story-card ${cfg.accent}`}><div className="full-story-head"><h3>完整内容预览</h3><span>{track.userSetting ? '按你的设定写的' : '已生成'}</span></div><pre>{track.fullStory}</pre></div>}
           <blockquote>“{cfg.quote}”</blockquote>
-          <div className="result-actions"><button className={`primary tone-${cfg.accent}`} onClick={() => setPage('sleep')}>{scene === 'zodiac' ? '查看播放 / 分镜' : '进入睡前播放'}</button><button className={`secondary tone-${cfg.accent}`} onClick={() => { addToCart(matchedPack); setPage('cart'); }}>购买完整内容包 ¥{matchedPack.price}</button><button className={`secondary tone-${cfg.accent}`} onClick={() => setPage('member')}>{scene === 'zodiac' ? '导出更多脚本权益' : '解锁连续剧追更'}</button></div>
+          <div className="result-actions"><button className={`primary tone-${cfg.accent}`} onClick={() => setPage('sleep')}>{scene === 'zodiac' ? '查看播放 / 分镜' : '去播放'}</button><button className={`secondary tone-${cfg.accent}`} onClick={() => { addToCart(matchedPack); setPage('cart'); }}>买完整版 ¥{matchedPack.price}</button><button className={`secondary tone-${cfg.accent}`} onClick={() => setPage('member')}>{scene === 'zodiac' ? '解锁更多脚本' : '继续追更'}</button></div>
         </Panel>
-        <Panel className={`commerce-panel ${cfg.accent}`}><span className={`pill gold ${cfg.accent}`}>自然商业化推荐</span><h3>推荐搭配礼盒</h3><img src={gift.image} alt="" /><h2>{gift.title}</h2><p>{gift.desc}</p><b>¥ {gift.price}</b><button className={`tone-${cfg.accent}`} onClick={() => { addToCart({ id: gift.id, type: '礼盒', title: gift.title, price: gift.price, image: gift.image, desc: gift.desc }); setPage('cart'); }}>加入购物车</button><button onClick={() => setPage('gift')}>查看礼盒详情</button></Panel>
+        <Panel className={`commerce-panel ${cfg.accent}`}><span className={`pill gold ${cfg.accent}`}>顺手推荐</span><h3>这个世界的同款礼盒</h3><img src={gift.image} alt="" /><h2>{gift.title}</h2><p>{gift.desc}</p><b>¥ {gift.price}</b><button className={`tone-${cfg.accent}`} onClick={() => { addToCart({ id: gift.id, type: '礼盒', title: gift.title, price: gift.price, image: gift.image, desc: gift.desc }); setPage('cart'); }}>加入购物车</button><button onClick={() => setPage('gift')}>看看礼盒</button></Panel>
       </div>
     </div>
   </main>;
 }
 
 function SleepPage({ track, form, setForm, setPage, immersive, setImmersive }) {
-  const current = track || { title: '末世重生：她靠空间异能养活整座安全屋', subtitle: '末世小说 · 大女主 · 无 CP · 空间异能 · 囤货经营', cover: '/assets/theme-underground-garden.webp', progress: '02:34', total: '28:45', chapters: [{ no: '01', name: '进入地下花园', time: '09:21' },{ no: '02', name: '安全屋初建', time: '09:48' },{ no: '03', name: '她在月光下种第一株花', time: '09:36' }] };
+  const current = track || { title: '末世重生：她靠空间异能养活整座安全屋', subtitle: '末世 · 大女主 · 空间异能 · 囤货建家', cover: '/assets/theme-underground-garden.webp', progress: '02:34', total: '28:45', chapters: [{ no: '01', name: '进入地下花园', time: '09:21' },{ no: '02', name: '安全屋初建', time: '09:48' },{ no: '03', name: '她在月光下种第一株花', time: '09:36' }] };
   const scene = inferSceneByTrack(track || { contentType: '末世小说' });
   const sceneMeta = sceneBackgrounds[scene];
   const cfg = getConfigByTrack(track || { contentType: '末世小说' });
@@ -664,12 +664,12 @@ function SleepPage({ track, form, setForm, setPage, immersive, setImmersive }) {
     <div className="scene-content">
     <SectionHeader kicker={`04 睡前播放 · ${sceneMeta.label}`} title="为这一晚保留更少干扰" desc="生成结束以后，页面只保留播放、沉浸模式和少量必要信息，让注意力真正从白天慢慢退出。" />
     <Panel className="player-redesign">
-      <div className={`player-topline ${cfg.accent}`}><div><h1>{cfg.sleepTitle} <span>{cfg.badge}</span></h1><p>{cfg.sleepHint}</p></div><span>☾ 正在根据你的偏好与习惯优化中 ···</span></div>
+      <div className={`player-topline ${cfg.accent}`}><div><h1>{cfg.sleepTitle} <span>{cfg.badge}</span></h1><p>{cfg.sleepHint}</p></div><span>☾ 已按你的偏好调好 ···</span></div>
       <div className="player-main-grid"><img className="cover" src={current.cover} alt="" /><div className="track-info"><h2>{current.title}</h2><p>{current.subtitle}</p><div className={`chips ${cfg.accent}`}><span>♪ {form.backgroundMusic}</span><span>⏱ {form.endAfter} 分钟后淡出</span><span>{cfg.chips[0]}</span></div><Wave count={78} /><div className="time"><span>{current.progress}</span><span>{current.total}</span></div></div><div className="controls"><button>↤</button><button className="pause">Ⅱ</button><button>↦</button><button>♡</button><button>↓</button><button>…</button></div></div>
       <div className="player-detail-grid">
         <div className={`detail-card ${cfg.accent}`}><h3>{cfg.detailTitle}</h3><img src={current.cover} alt="" /><p>{current.userSetting ? `用户设定：${current.userSetting}` : cfg.detailText.split('\n').map((line, idx) => <React.Fragment key={idx}>{line}<br /></React.Fragment>)}</p><blockquote>{cfg.quote}</blockquote></div>
-        <div className={`detail-card highlight ${cfg.accent}`}><h3>{scene === 'zodiac' ? '输出模式' : '播放模式'}</h3><div className="mode-list"><span>背景音乐：{form.backgroundMusic}</span><span>定时关闭：{form.endAfter} 分钟后</span><span>{scene === 'zodiac' ? '输出重点：分镜与口播' : `背景音量：${form.musicVolume}%`}</span></div><button className={`tone-${cfg.accent}`} onClick={() => setImmersive(true)}>{scene === 'zodiac' ? '进入沉浸预览模式' : '进入沉浸睡眠模式'}</button><button onClick={() => setPage('studio')} className="ghost-btn">重新定制</button></div>
-        <div className={`detail-card ${cfg.accent}`}><h3>{cfg.companionTitle}</h3>{current.chapters.map((c) => <div className={`chapter ${cfg.accent}`} key={c.no}><b>{c.no}</b><span>{c.name}</span><em>{c.time}</em></div>)}<button className={`tone-${cfg.accent}`} onClick={() => setPage('result')}>{scene === 'zodiac' ? '查看脚本结果' : '查看生成结果'}</button></div>
+        <div className={`detail-card highlight ${cfg.accent}`}><h3>{scene === 'zodiac' ? '输出模式' : '播放模式'}</h3><div className="mode-list"><span>背景音乐：{form.backgroundMusic}</span><span>定时关闭：{form.endAfter} 分钟后</span><span>{scene === 'zodiac' ? '输出重点：分镜与口播' : `背景音量：${form.musicVolume}%`}</span></div><button className={`tone-${cfg.accent}`} onClick={() => setImmersive(true)}>{scene === 'zodiac' ? '进入沉浸预览模式' : '进入安静播放'}</button><button onClick={() => setPage('studio')} className="ghost-btn">重新写一个</button></div>
+        <div className={`detail-card ${cfg.accent}`}><h3>{cfg.companionTitle}</h3>{current.chapters.map((c) => <div className={`chapter ${cfg.accent}`} key={c.no}><b>{c.no}</b><span>{c.name}</span><em>{c.time}</em></div>)}<button className={`tone-${cfg.accent}`} onClick={() => setPage('result')}>{scene === 'zodiac' ? '查看脚本结果' : '回去看全文'}</button></div>
       </div>
     </Panel>
     </div>
@@ -682,8 +682,8 @@ function MemberPage({ setPage, track, addToCart }) {
     apocalypse: {
       title: '末世连续剧会员',
       price: '¥ 128 / 年',
-      desc: '解锁安全屋系列长音频、异能设定库与连续剧追更。',
-      perks: ['90 分钟长音频', '安全屋系列追更', '异能设定库', '低刺激剧情模式'],
+      desc: '解锁安全屋系列长音频、能力设定库与连续剧追更。',
+      perks: ['90 分钟长音频', '安全屋系列追更', '能力设定库', '睡前温和版剧情模式'],
       trigger: '当前内容：末日地下花园，推荐开通连续剧追更'
     },
     zodiac: {
@@ -723,21 +723,21 @@ function MemberPage({ setPage, track, addToCart }) {
             <p>{plan.desc}</p>
             <button onClick={() => setPage('studio')}>继续定制</button>
           </div>
-          <div className="member-trigger"><b>升级触发点</b><p>{plan.trigger}</p></div>
+          <div className="member-trigger"><b>为什么现在推荐</b><p>{plan.trigger}</p></div>
         </Panel>
         <Panel className={`pricing-card ${cfg.accent}`}>
           <h3>{plan.title}</h3>
           <b>{plan.price}</b>
           <p>{plan.desc}</p>
           <ul>{plan.perks.map((perk) => <li key={perk}>{perk}</li>)}</ul>
-          <button className={`primary wide tone-${cfg.accent}`} onClick={() => { addToCart(memberItem); setPage('cart'); }}>加入购物车并开通</button>
+          <button className={`primary wide tone-${cfg.accent}`} onClick={() => { addToCart(memberItem); setPage('cart'); }}>加入购物车</button>
         </Panel>
         <Panel className={`member-menu ${cfg.accent}`}>
-          <h3>与当前内容联动</h3>
-          <button onClick={() => setPage('result')}>查看生成结果 <span>›</span></button>
-          <button onClick={() => setPage('sleep')}>进入睡前播放 <span>›</span></button>
+          <h3>和当前内容有关</h3>
+          <button onClick={() => setPage('result')}>回去看全文 <span>›</span></button>
+          <button onClick={() => setPage('sleep')}>去播放 <span>›</span></button>
           <button onClick={() => setPage('gift')}>匹配主题礼盒 <span>›</span></button>
-          <button onClick={() => setPage('studio')}>重新定制内容 <span>›</span></button>
+          <button onClick={() => setPage('studio')}>重新写一个内容 <span>›</span></button>
         </Panel>
       </div>
     </div>
@@ -769,7 +769,7 @@ function GiftPage({ gifts, setPage, track, addToCart }) {
       <div className="gift-grid-page differentiated-gifts">
         {gifts.map((g, idx) => <Panel key={g.id} className={`gift-big ${idx === 2 && cfg.accent === 'apocalypse' ? 'featured' : ''} ${idx === 0 && cfg.accent === 'zodiac' ? 'featured' : ''} ${idx === 1 && cfg.accent === 'story' ? 'featured' : ''}`}>
           <img src={g.image} alt="" />
-          <div><h2>{g.title}</h2><p>{g.desc || '主题音频兑换码、睡前记录本、香薰、贴纸与限定周边。'}</p><small>适配内容：{g.match}</small><b>¥ {g.price}</b><button className={`tone-${cfg.accent}`} onClick={() => { addToCart({ id: g.id, type: '礼盒', title: g.title, price: g.price, image: g.image, desc: g.desc }); setPage('cart'); }}>加入购物车</button></div>
+          <div><h2>{g.title}</h2><p>{g.desc || '主题内容兑换码、睡前记录本、香薰、贴纸与限定周边。'}</p><small>适配内容：{g.match}</small><b>¥ {g.price}</b><button className={`tone-${cfg.accent}`} onClick={() => { addToCart({ id: g.id, type: '礼盒', title: g.title, price: g.price, image: g.image, desc: g.desc }); setPage('cart'); }}>加入购物车</button></div>
         </Panel>)}
       </div>
     </div>
@@ -779,17 +779,17 @@ function GiftPage({ gifts, setPage, track, addToCart }) {
 
 function StorePage({ setPage, addToCart }) {
   const promos = [
-    ['首月会员优惠', '新用户首月 9.9 元，解锁无限生成和高级声线。'],
-    ['限时内容包', '《末世重生》前 3 集免费，第 4–10 集 12.9 元解锁。'],
-    ['礼盒优惠券', '听满 3 晚雨夜书店，获得 20 元礼盒券。'],
-    ['睡前签到', '连续 7 晚使用，送 1 次高级声线体验券。'],
-    ['分享裂变', '分享专属梦境标题，好友试听后双方各得 1 次免费生成。']
+    ['新人会员优惠', '新用户首月 9.9 元，可以多生成几次，也能试高级声线。'],
+    ['限时小内容包', '《末世重生》前 3 集免费，喜欢再解锁后面的 7 集。'],
+    ['礼盒券', '连续听 3 晚雨夜书店，就送一张 20 元礼盒券。'],
+    ['睡前打卡', '连续 7 晚使用，送一次高级声线体验。'],
+    ['分享给朋友', '把你的梦境标题分享给朋友，朋友试听后，两个人都能多生成一次。']
   ];
   return <main className="page ecommerce-page store-page">
-    <SectionHeader kicker="05 内容商店" title="梦境内容商店" desc="把 AI 生成能力商品化：数字内容包、系列追更、视频脚本包和场景音频包，构成内容电商核心收入。" />
+    <SectionHeader kicker="05 内容商店" title="梦境内容小店" desc="这里卖的是可直接听、可继续追、也能拿去做视频的内容包。价格不高，适合先买一个试试。" />
     <section className="store-hero panel">
-      <div><span className="pill gold">AI 个性化睡前内容电商平台</span><h2>免费试听 3 分钟，再购买完整内容包</h2><p>内容商店承担单次付费转化：用户不一定立刻开会员，也不一定购买礼盒，但更容易先为一个 4.9–12.9 元的数字内容包付费。</p></div>
-      <button className="primary" onClick={() => setPage('studio')}>先免费生成试听</button>
+      <div><span className="pill gold">专属于你的睡前内容小店</span><h2>先试听 3 分钟，喜欢再买完整版</h2><p>很多人不会一上来就开会员，也不一定立刻买礼盒。所以先放几个低价内容包，让用户用很小的成本试一试。</p></div>
+      <button className="primary" onClick={() => setPage('studio')}>先生成一段试听</button>
     </section>
     <div className="product-grid">
       {digitalProducts.map((p) => { const cfg = contentConfigs[p.scene] || contentConfigs.story; return <Panel className={`product-card ${cfg.accent}`} key={p.id}>
@@ -814,12 +814,12 @@ function CartPage({ cart, setCart, setPage }) {
       return next <= 0 ? [] : [{ ...item, quantity: next }];
     }));
   }
-  if (paid) return <main className="page ecommerce-page"><Panel className="pay-success"><span className="success-icon">✓</span><h1>支付成功</h1><p>订单号 DR-{Date.now().toString().slice(-8)} 已生成。数字内容兑换码和会员权益已发放，礼盒订单进入模拟发货流程。</p><div className="success-assets"><span>音频兑换码：DREAM-2026</span><span>会员权益：已激活</span><span>礼盒物流：待发货</span></div><button className="primary" onClick={() => { setCart([]); setPaid(false); setPage('dashboard'); }}>查看商业数据看板</button></Panel></main>;
+  if (paid) return <main className="page ecommerce-page"><Panel className="pay-success"><span className="success-icon">✓</span><h1>支付成功</h1><p>订单号 DR-{Date.now().toString().slice(-8)} 已生成。内容兑换码和会员权益已经发放，礼盒订单进入模拟发货流程。</p><div className="success-assets"><span>内容兑换码：DREAM-2026</span><span>会员权益：已开通</span><span>礼盒物流：待发货</span></div><button className="primary" onClick={() => { setCart([]); setPaid(false); setPage('dashboard'); }}>看看经营数据</button></Panel></main>;
   return <main className="page ecommerce-page">
-    <SectionHeader kicker="08 购物车 / 结算" title="完整交易闭环原型" desc="加入购物车、选择优惠券、模拟支付、支付成功后发放音频兑换码 / 会员权益 / 礼盒订单号。" />
+    <SectionHeader kicker="08 购物车 / 结算" title="下单流程演示" desc="这里演示从加入购物车到支付成功的完整流程。课堂展示用的是确认支付，不会真的扣款。" />
     <div className="cart-layout"><Panel className="cart-list">
-      {cart.length === 0 ? <div className="empty-cart"><h2>购物车还是空的</h2><p>去内容商店购买一个数字内容包，或者在礼盒页加入主题礼盒。</p><button className="primary" onClick={() => setPage('store')}>去内容商店</button></div> : cart.map((item) => <div className="cart-row" key={item.id}><img src={item.cover} alt="" /><div><span>{item.type}</span><h3>{item.title}</h3><p>{item.desc}</p></div><div className="qty"><button onClick={() => updateQty(item.id, -1)}>-</button><b>{item.quantity}</b><button onClick={() => updateQty(item.id, 1)}>+</button></div><strong>¥ {(item.price * item.quantity).toFixed(1)}</strong></div>)}
-    </Panel><Panel className="checkout-card"><h2>订单结算</h2><label>优惠券</label><div className="coupon-row"><button className={coupon === 'sleep20' ? 'active' : ''} onClick={() => setCoupon('sleep20')}>满 20 减 20</button><button className={coupon === 'new9' ? 'active' : ''} onClick={() => setCoupon('new9')}>新人 9.9 优惠</button></div><div className="checkout-line"><span>商品小计</span><b>¥ {subtotal.toFixed(1)}</b></div><div className="checkout-line"><span>优惠减免</span><b>- ¥ {discount.toFixed(1)}</b></div><div className="checkout-total"><span>应付金额</span><b>¥ {total.toFixed(1)}</b></div><button className="primary wide" disabled={cart.length === 0} onClick={() => setPaid(true)}>模拟支付</button><p className="checkout-note">课堂 Demo 不接真实支付，仅展示交易流程与权益发放逻辑。</p></Panel></div>
+      {cart.length === 0 ? <div className="empty-cart"><h2>购物车里还没有东西</h2><p>可以先去内容小店买一个故事包，也可以在礼盒页加入一个主题礼盒。</p><button className="primary" onClick={() => setPage('store')}>去内容小店</button></div> : cart.map((item) => <div className="cart-row" key={item.id}><img src={item.cover} alt="" /><div><span>{item.type}</span><h3>{item.title}</h3><p>{item.desc}</p></div><div className="qty"><button onClick={() => updateQty(item.id, -1)}>-</button><b>{item.quantity}</b><button onClick={() => updateQty(item.id, 1)}>+</button></div><strong>¥ {(item.price * item.quantity).toFixed(1)}</strong></div>)}
+    </Panel><Panel className="checkout-card"><h2>确认订单</h2><label>可用优惠</label><div className="coupon-row"><button className={coupon === 'sleep20' ? 'active' : ''} onClick={() => setCoupon('sleep20')}>满 20 减 20</button><button className={coupon === 'new9' ? 'active' : ''} onClick={() => setCoupon('new9')}>新人 9.9 优惠</button></div><div className="checkout-line"><span>小计</span><b>¥ {subtotal.toFixed(1)}</b></div><div className="checkout-line"><span>已优惠</span><b>- ¥ {discount.toFixed(1)}</b></div><div className="checkout-total"><span>还需支付</span><b>¥ {total.toFixed(1)}</b></div><button className="primary wide" disabled={cart.length === 0} onClick={() => setPaid(true)}>确认支付</button><p className="checkout-note">这是课堂演示用的确认支付，只展示流程，不会产生真实扣款。</p></Panel></div>
   </main>;
 }
 
@@ -827,7 +827,7 @@ function DashboardPage({ track, setPage }) {
   const cfg = getConfigByTrack(track || { contentType: '末世小说' });
   const metrics = [['DAU','12,480','+18.6%'],['次日留存率','42.8%','+6.2%'],['7 日留存率','26.5%','+4.1%'],['平均收听时长','23.7 min','+11.4%'],['生成转播放率','71.2%','+8.9%'],['免费转付费率','9.6%','+2.3%'],['内容包购买率','6.8%','+1.9%'],['礼盒点击率','4.2%','+1.1%'],['客单价','¥ 36.7','+5.4%'],['复购率','18.3%','+3.6%']];
   const profile = [['偏好内容', cfg.label],['偏好声线','温柔女声 / 广播电台'],['常用时长','30 分钟后淡出'],['常听时间','23:00–01:00'],['睡前情绪','焦虑 / 疲惫 / 脑子停不下来'],['付费行为','买过内容包 / 收藏过礼盒']];
-  return <main className={`page themed-page scene-page scene-${cfg.scene} dashboard-page`}><SceneBackdrop scene={cfg.scene} /><div className="scene-content"><SectionHeader kicker="09 商业数据看板" title="用指标证明电商闭环成立" desc="从访问首页到免费生成、播放试听、购买内容包、开通会员、购买礼盒和复购分享。" /><section className="closed-loop panel"><span>访问首页</span><i>→</i><span>免费生成</span><i>→</i><span>播放试听</span><i>→</i><span>购买内容包</span><i>→</i><span>开通会员</span><i>→</i><span>购买礼盒</span><i>→</i><span>复购 / 分享</span></section><div className="dashboard-layout"><Panel className="metric-grid">{metrics.map(([name, value, change]) => <div className="metric-card" key={name}><span>{name}</span><b>{value}</b><em>{change}</em></div>)}</Panel><Panel className="profile-panel"><h2>用户画像与推荐逻辑</h2>{profile.map(([k, v]) => <div className="profile-row" key={k}><span>{k}</span><b>{v}</b></div>)}<blockquote>你最近连续 3 晚收听“末世安全屋”系列，推荐解锁《空间异能篇》完整 10 集包；你常选择 30 分钟后淡出，推荐开启自动睡眠模式。</blockquote><button className={`primary wide tone-${cfg.accent}`} onClick={() => setPage('store')}>查看推荐内容包</button></Panel></div></div></main>;
+  return <main className={`page themed-page scene-page scene-${cfg.scene} dashboard-page`}><SceneBackdrop scene={cfg.scene} /><div className="scene-content"><SectionHeader kicker="09 经营数据看板" title="用数据看看这门生意能不能跑起来" desc="从首页访问、免费生成，到买一个内容包、开会员、买礼盒和复购分享，核心指标都放在这里。" /><section className="closed-loop panel"><span>访问首页</span><i>→</i><span>免费生成</span><i>→</i><span>播放试听</span><i>→</i><span>买一个内容包</span><i>→</i><span>想多听就开会员</span><i>→</i><span>购买礼盒</span><i>→</i><span>复购 / 分享</span></section><div className="dashboard-layout"><Panel className="metric-grid">{metrics.map(([name, value, change]) => <div className="metric-card" key={name}><span>{name}</span><b>{value}</b><em>{change}</em></div>)}</Panel><Panel className="profile-panel"><h2>用户偏好和推荐逻辑</h2>{profile.map(([k, v]) => <div className="profile-row" key={k}><span>{k}</span><b>{v}</b></div>)}<blockquote>你最近连续 3 晚收听“末世安全屋”系列，推荐解锁《空间异能篇》完整 10 集包；你常选择 30 分钟后淡出，推荐开启自动睡眠模式。</blockquote><button className={`primary wide tone-${cfg.accent}`} onClick={() => setPage('store')}>查看推荐内容包</button></Panel></div></div></main>;
 }
 
 
@@ -852,10 +852,10 @@ function App() {
   const [track, setTrack] = useState(null);
   const [cart, setCart] = useState([]);
   const [form, setFormBase] = useState({
-    storyMode: '大女主', cpMode: '无 CP', power: '空间异能', tone: '低刺激', length: '中篇',
+    storyMode: '大女主', cpMode: '无 CP', power: '空间异能', tone: '睡前温和版', length: '中篇',
     zodiacScene: '末日庇护所', zodiacSign: '双鱼座', videoOutput: '分镜脚本', theme: '雨夜书店', mood: '焦虑', voice: '温柔女声',
     background: '雨声', backgroundMusic: '空灵钢琴', endAfter: 30, musicVolume: 60,
-    customSetting: '', mustHave: '', avoidElements: '', dramaLevel: '中等狗血', pov: '第三人称', endingStyle: '留悬念'
+    customSetting: '', mustHave: '', avoidElements: '', dramaLevel: '有点狗血', pov: '第三人称', endingStyle: '留悬念'
   });
   const setForm = (patch) => setFormBase((prev) => ({ ...prev, ...patch }));
   const addToCart = (item) => {
